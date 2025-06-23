@@ -2,6 +2,7 @@ export type User = {
     id: string;
     name: string;
     matricNumber: string;
+    password?: string;
     role: 'student' | 'doctor' | 'staff';
   };
   
@@ -25,13 +26,13 @@ export type User = {
   };
   
   export const users: User[] = [
-    { id: 'usr_1', name: 'Alice Johnson', matricNumber: 'S012345', role: 'student' },
-    { id: 'usr_2', name: 'Bob Williams', matricNumber: 'S067890', role: 'student' },
-    { id: 'usr_3', name: 'Dr. Carol White', matricNumber: 'D10001', role: 'doctor' },
-    { id: 'usr_4', name: 'Dr. David Green', matricNumber: 'D10002', role: 'doctor' },
-    { id: 'usr_5', name: 'Eve Black', matricNumber: 'S054321', role: 'student' },
-    { id: 'usr_6', name: 'Charlie Brown', matricNumber: 'S009876', role: 'student' },
-    { id: 'usr_7', name: 'Frank Wright', matricNumber: 'T20001', role: 'staff' },
+    { id: 'usr_1', name: 'Alice Johnson', matricNumber: 'S012345', role: 'student', password: 'password123' },
+    { id: 'usr_2', name: 'Bob Williams', matricNumber: 'S067890', role: 'student', password: 'password123' },
+    { id: 'usr_3', name: 'Dr. Carol White', matricNumber: 'D10001', role: 'doctor', password: 'password123' },
+    { id: 'usr_4', name: 'Dr. David Green', matricNumber: 'D10002', role: 'doctor', password: 'password123' },
+    { id: 'usr_5', name: 'Eve Black', matricNumber: 'S054321', role: 'student', password: 'password123' },
+    { id: 'usr_6', name: 'Charlie Brown', matricNumber: 'S009876', role: 'student', password: 'password123' },
+    { id: 'usr_7', name: 'Frank Wright', matricNumber: 'T20001', role: 'staff', password: 'password123' },
   ];
   
   export const appointments: Appointment[] = [

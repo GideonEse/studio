@@ -15,9 +15,11 @@ import {
     MessageSquareQuote,
     LogOut,
     Stethoscope,
-    User
+    User,
+    Briefcase
 } from 'lucide-react';
 import Link from 'next/link';
+import { useAuth } from '@/contexts/auth-context';
 
 const studentLinks = [
   { href: '/student/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -29,20 +31,31 @@ const doctorLinks = [
   { href: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
 ];
 
-const getRoleAndLinks = (pathname: string) => {
-    if (pathname.startsWith('/student')) {
-        return { role: 'Student', icon: <User className="w-5 h-5"/>, links: studentLinks };
-    }
-    if (pathname.startsWith('/admin') || pathname.startsWith('/inquiries/')) {
-        return { role: 'Doctor', icon: <Stethoscope className="w-5 h-5"/>, links: doctorLinks };
-    }
-    return { role: 'User', icon: <User className="w-5 h-5"/>, links: [] };
-}
+const staffLinks = [
+    { href: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+];
 
 
 export function AppSidebar() {
   const pathname = usePathname();
-  const { role, icon, links } = getRoleAndLinks(pathname);
+  const { currentUser, logout } = useAuth();
+  
+  const getRoleAndLinks = () => {
+    if (!currentUser) return { role: 'User', icon: <User className="w-5 h-5"/>, links: [] };
+
+    switch(currentUser.role) {
+        case 'student':
+            return { role: 'Student', icon: <User className="w-5 h-5"/>, links: studentLinks };
+        case 'doctor':
+            return { role: 'Doctor', icon: <Stethoscope className="w-5 h-5"/>, links: doctorLinks };
+        case 'staff':
+            return { role: 'Staff', icon: <Briefcase className="w-5 h-5"/>, links: staffLinks };
+        default:
+            return { role: 'User', icon: <User className="w-5 h-5"/>, links: [] };
+    }
+  }
+  
+  const { role, icon, links } = getRoleAndLinks();
   
   return (
     <>
@@ -72,12 +85,10 @@ export function AppSidebar() {
       <SidebarFooter>
         <SidebarMenu>
             <SidebarMenuItem>
-                 <Link href="/" className="w-full">
-                    <SidebarMenuButton tooltip="Logout">
-                        <LogOut/>
-                        <span>Logout</span>
-                    </SidebarMenuButton>
-                 </Link>
+                 <SidebarMenuButton onClick={logout} tooltip="Logout" className="w-full">
+                    <LogOut/>
+                    <span>Logout</span>
+                </SidebarMenuButton>
             </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>

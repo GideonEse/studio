@@ -9,6 +9,7 @@ import { useToast } from '@/hooks/use-toast';
 import { format, startOfDay } from 'date-fns';
 import { appointments } from '@/lib/mock-data';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/contexts/auth-context';
 
 const timeSlots = [
   '09:00 AM', '09:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM',
@@ -22,6 +23,7 @@ export default function BookAppointmentPage() {
   const [reason, setReason] = React.useState('');
   const { toast } = useToast();
   const router = useRouter();
+  const { currentUser } = useAuth();
 
   const bookedTimes = React.useMemo(() => {
     if (!date) return [];
@@ -32,7 +34,7 @@ export default function BookAppointmentPage() {
   }, [date]);
 
   const handleBooking = () => {
-    if (!date || !selectedTime) {
+    if (!date || !selectedTime || !currentUser) {
         toast({
             variant: "destructive",
             title: "Booking Failed",
@@ -57,8 +59,8 @@ export default function BookAppointmentPage() {
 
     const newAppointment = {
         id: `apt_${Date.now()}`,
-        studentName: 'Alice Johnson',
-        studentId: 'usr_1',
+        studentName: currentUser.name,
+        studentId: currentUser.id,
         dateTime: bookingDateTime,
         reason: reason || 'Not provided',
         status: 'Confirmed' as const,

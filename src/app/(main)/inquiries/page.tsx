@@ -10,19 +10,28 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/contexts/auth-context';
 
 export default function InquiriesPage() {
   const [activeTab, setActiveTab] = useState('new');
   const [question, setQuestion] = useState('');
   const { toast } = useToast();
+  const { currentUser } = useAuth();
 
   // Initialize history from mock data, but manage it in state to allow updates
   const [inquiryHistory, setInquiryHistory] = useState(() => 
-    inquiries.filter(i => i.studentId === 'usr_1' || i.studentId === 'usr_2')
+    currentUser ? inquiries.filter(i => i.studentId === currentUser.id) : []
   );
 
+  React.useEffect(() => {
+    if (currentUser) {
+        setInquiryHistory(inquiries.filter(i => i.studentId === currentUser.id));
+    }
+  }, [currentUser]);
+
+
   const handleSubmitInquiry = () => {
-    if (!question.trim()) {
+    if (!question.trim() || !currentUser) {
       toast({
         variant: "destructive",
         title: "Error",
@@ -33,8 +42,8 @@ export default function InquiriesPage() {
 
     const newInquiry = {
       id: `inq_${Date.now()}`,
-      studentName: 'Alice Johnson', // Assuming logged-in user is Alice
-      studentId: 'usr_1',
+      studentName: currentUser.name,
+      studentId: currentUser.id,
       date: new Date(),
       question: question,
       status: 'Pending' as const,

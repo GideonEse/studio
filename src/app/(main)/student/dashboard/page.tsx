@@ -1,3 +1,5 @@
+'use client';
+
 import Link from "next/link";
 import { appointments, inquiries } from "@/lib/mock-data";
 import { Button } from "@/components/ui/button";
@@ -6,10 +8,15 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, CalendarPlus, MessageSquareQuote } from "lucide-react";
 import { format } from "date-fns";
+import { useAuth } from "@/contexts/auth-context";
 
 export default function StudentDashboard() {
-  const upcomingAppointments = appointments.filter(a => a.studentId === 'usr_1' && a.status === 'Confirmed');
-  const inquiryHistory = inquiries.filter(i => i.studentId === 'usr_1');
+  const { currentUser } = useAuth();
+
+  if (!currentUser) return null;
+
+  const upcomingAppointments = appointments.filter(a => a.studentId === currentUser.id && a.status === 'Confirmed' && new Date(a.dateTime) >= new Date());
+  const inquiryHistory = inquiries.filter(i => i.studentId === currentUser.id);
 
   return (
     <div className="grid gap-6">

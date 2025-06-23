@@ -1,5 +1,7 @@
 'use client';
 import Link from 'next/link';
+import * as React from 'react';
+import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -12,46 +14,99 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Briefcase, Stethoscope, User } from 'lucide-react';
+import { useAuth } from '@/contexts/auth-context';
+import { useToast } from '@/hooks/use-toast';
+import { Loader } from 'lucide-react';
 
 export function LoginForm() {
+  const [matricNumber, setMatricNumber] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [loading, setLoading] = React.useState(false);
+  const { login } = useAuth();
+  const router = useRouter();
+  const { toast } = useToast();
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const user = await login(matricNumber, password);
+      if (user) {
+        toast({
+          title: 'Login Successful',
+          description: `Welcome back, ${user.name}!`,
+        });
+        if (user.role === 'student') {
+          router.push('/student/dashboard');
+        } else {
+          router.push('/admin/dashboard');
+        }
+      } else {
+        toast({
+          variant: 'destructive',
+          title: 'Login Failed',
+          description: 'Invalid matric number or password.',
+        });
+      }
+    } catch (error) {
+      toast({
+        variant: 'destructive',
+        title: 'An error occurred',
+        description: 'Could not process your login request.',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
   return (
     <Card className="w-full max-w-sm">
-      <CardHeader>
-        <CardTitle className="text-2xl font-headline">Login</CardTitle>
-        <CardDescription>
-          Enter your matric number below to login. For demo purposes, select a role to continue.
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="grid gap-4">
-        <div className="grid gap-2">
-          <Label htmlFor="matricNumber">Matric Number</Label>
-          <Input id="matricNumber" type="text" placeholder="S012345" required />
-        </div>
-        <div className="grid gap-2">
-          <Label htmlFor="password">Password</Label>
-          <Input id="password" type="password" required />
-        </div>
-        <div className="grid grid-cols-2 gap-2 pt-4">
-            <Button asChild className="col-span-2">
-                <Link href="/student/dashboard"><User/>Sign in as Student</Link>
-            </Button>
-            <Button asChild variant="secondary" className="col-span-2">
-                <Link href="/admin/dashboard"><Stethoscope/>Sign in as Doctor</Link>
-            </Button>
-            <Button asChild variant="outline" className="col-span-2">
-                <Link href="/admin/dashboard"><Briefcase/>Sign in as Staff</Link>
-            </Button>
-        </div>
-      </CardContent>
-      <CardFooter>
-        <div className="text-sm">
-          Don&apos;t have an account?{' '}
-          <Link href="/register" className="underline">
-            Register
-          </Link>
-        </div>
-      </CardFooter>
+      <form onSubmit={handleLogin}>
+        <CardHeader>
+          <CardTitle className="text-2xl font-headline">Login</CardTitle>
+          <CardDescription>
+            Enter your matric number and password to login.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="grid gap-4">
+          <div className="grid gap-2">
+            <Label htmlFor="matricNumber">Matric Number</Label>
+            <Input 
+              id="matricNumber" 
+              type="text" 
+              placeholder="S012345" 
+              required 
+              value={matricNumber}
+              onChange={(e) => setMatricNumber(e.target.value)}
+            />
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="password">Password</Label>
+            <Input 
+              id="password" 
+              type="password" 
+              required 
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••"
+            />
+          </div>
+          <Button type="submit" className="w-full mt-4" disabled={loading}>
+            {loading && <Loader className="animate-spin mr-2" />}
+            Login
+          </Button>
+        </CardContent>
+        <CardFooter>
+          <div className="text-sm">
+            Don&apos;t have an account?{' '}
+            <Link href="/register" className="underline">
+              Register
+            </Link>
+          </div>
+        </CardFooter>
+      </form>
     </Card>
   );
 }

@@ -16,17 +16,19 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
-import { users, type User } from '@/lib/mock-data';
+import type { User } from '@/lib/mock-data';
+import { useAuth } from '@/contexts/auth-context';
 
 export function RegisterForm() {
   const { toast } = useToast();
   const router = useRouter();
+  const { register } = useAuth();
   const [fullName, setFullName] = React.useState('');
   const [matricNumber, setMatricNumber] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [role, setRole] = React.useState<User['role']>('student');
 
-  const handleRegister = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleRegister = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (!fullName || !matricNumber || !password) {
       toast({
@@ -38,13 +40,13 @@ export function RegisterForm() {
     }
 
     const newUser = {
-      id: `usr_${users.length + 1}`,
       name: fullName,
       matricNumber: matricNumber,
+      password: password,
       role: role,
     };
     
-    users.push(newUser);
+    await register(newUser);
 
     toast({
       title: 'Account Created!',

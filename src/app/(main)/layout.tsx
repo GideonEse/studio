@@ -1,13 +1,44 @@
+'use client';
+
+import * as React from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/contexts/auth-context';
 import { AppSidebar } from '@/components/shared/app-sidebar';
 import { UserNav } from '@/components/shared/user-nav';
 import { Logo } from '@/components/icons/logo';
 import { SidebarProvider, Sidebar, SidebarTrigger, SidebarInset } from '@/components/ui/sidebar';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function MainLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const { currentUser } = useAuth();
+  const router = useRouter();
+
+  React.useEffect(() => {
+    // If there's no user after a brief moment, redirect to login.
+    const timer = setTimeout(() => {
+        if (!currentUser) {
+            router.push('/');
+        }
+    }, 100); // Small delay to allow context to populate
+    return () => clearTimeout(timer);
+  }, [currentUser, router]);
+
+  if (!currentUser) {
+    return (
+        <div className="flex items-center justify-center min-h-screen">
+            <div className="p-4 space-y-4">
+                <Skeleton className="h-12 w-12 rounded-full" />
+                <Skeleton className="h-4 w-[250px]" />
+                <Skeleton className="h-4 w-[200px]" />
+            </div>
+        </div>
+    );
+  }
+
   return (
     <SidebarProvider>
       <Sidebar>
