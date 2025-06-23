@@ -1,3 +1,6 @@
+'use client';
+
+import React, { useState } from 'react';
 import { inquiries } from "@/lib/mock-data";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -6,14 +9,55 @@ import { format } from "date-fns";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useToast } from '@/hooks/use-toast';
 
 export default function InquiriesPage() {
-  const inquiryHistory = inquiries.filter(i => i.studentId === 'usr_1' || i.studentId === 'usr_2');
+  const [activeTab, setActiveTab] = useState('new');
+  const [question, setQuestion] = useState('');
+  const { toast } = useToast();
+
+  // Initialize history from mock data, but manage it in state to allow updates
+  const [inquiryHistory, setInquiryHistory] = useState(() => 
+    inquiries.filter(i => i.studentId === 'usr_1' || i.studentId === 'usr_2')
+  );
+
+  const handleSubmitInquiry = () => {
+    if (!question.trim()) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Inquiry cannot be empty."
+      });
+      return;
+    }
+
+    const newInquiry = {
+      id: `inq_${Date.now()}`,
+      studentName: 'Alice Johnson', // Assuming logged-in user is Alice
+      studentId: 'usr_1',
+      date: new Date(),
+      question: question,
+      status: 'Pending' as const,
+    };
+
+    // Add to the master list
+    inquiries.unshift(newInquiry); 
+    // Update local state to trigger re-render
+    setInquiryHistory(prev => [newInquiry, ...prev]);
+
+    toast({
+      title: "Inquiry Submitted",
+      description: "Our staff will respond within 24-48 hours."
+    });
+
+    setQuestion('');
+    setActiveTab('history');
+  };
   
   return (
     <div>
       <h1 className="text-3xl font-bold mb-6 font-headline">Health Inquiries</h1>
-      <Tabs defaultValue="new">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="grid w-full grid-cols-2 max-w-md">
             <TabsTrigger value="new">New Inquiry</TabsTrigger>
             <TabsTrigger value="history">History</TabsTrigger>
@@ -28,8 +72,13 @@ export default function InquiriesPage() {
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                    <Textarea placeholder="Type your question here..." className="min-h-[150px]"/>
-                    <Button>Submit Inquiry</Button>
+                    <Textarea 
+                      placeholder="Type your question here..." 
+                      className="min-h-[150px]"
+                      value={question}
+                      onChange={(e) => setQuestion(e.target.value)}
+                    />
+                    <Button onClick={handleSubmitInquiry}>Submit Inquiry</Button>
                 </CardContent>
             </Card>
         </TabsContent>
@@ -50,7 +99,7 @@ export default function InquiriesPage() {
                     </TableRow>
                     </TableHeader>
                     <TableBody>
-                    {inquiryHistory.map((inq) => (
+                    {inquiryHistory.length > 0 ? inquiryHistory.map((inq) => (
                         <TableRow key={inq.id}>
                         <TableCell>{format(inq.date, "PPP")}</TableCell>
                         <TableCell className="max-w-xs truncate">{inq.question}</TableCell>
@@ -59,7 +108,11 @@ export default function InquiriesPage() {
                         </TableCell>
                         <TableCell className="max-w-xs truncate">{inq.response || 'No response yet.'}</TableCell>
                         </TableRow>
-                    ))}
+                    )) : (
+                      <TableRow>
+                        <TableCell colSpan={4} className="text-center">You have no inquiry history.</TableCell>
+                      </TableRow>
+                    )}
                     </TableBody>
                 </Table>
                 </CardContent>

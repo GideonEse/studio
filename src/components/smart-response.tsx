@@ -10,9 +10,10 @@ import { Badge } from './ui/badge';
 
 type Props = {
   inquiryText: string;
+  onResponseGenerated: (response: string) => void;
 };
 
-export function SmartResponse({ inquiryText }: Props) {
+export function SmartResponse({ inquiryText, onResponseGenerated }: Props) {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<{
     suggestedResponse: string;
@@ -27,6 +28,9 @@ export function SmartResponse({ inquiryText }: Props) {
     try {
       const response = await getSmartResponse({ inquiry: inquiryText });
       setResult(response);
+      if (response?.suggestedResponse) {
+        onResponseGenerated(response.suggestedResponse);
+      }
     } catch (e) {
       setError('Failed to generate response. Please try again.');
       console.error(e);
@@ -72,7 +76,7 @@ export function SmartResponse({ inquiryText }: Props) {
            
             <Alert>
                 <Sparkles className="h-4 w-4" />
-                <AlertTitle>Suggested Response</AlertTitle>
+                <AlertTitle>Suggested Response (copied to input below)</AlertTitle>
                 <AlertDescription>
                 <Textarea
                     readOnly

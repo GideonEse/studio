@@ -7,6 +7,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { format } from 'date-fns';
+import { appointments } from '@/lib/mock-data';
+import { useRouter } from 'next/navigation';
 
 const timeSlots = [
   '09:00 AM', '09:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM',
@@ -17,7 +19,9 @@ const timeSlots = [
 export default function BookAppointmentPage() {
   const [date, setDate] = React.useState<Date | undefined>(new Date());
   const [selectedTime, setSelectedTime] = React.useState<string | null>(null);
+  const [reason, setReason] = React.useState('');
   const { toast } = useToast();
+  const router = useRouter();
 
   const handleBooking = () => {
     if (!date || !selectedTime) {
@@ -28,10 +32,38 @@ export default function BookAppointmentPage() {
         })
         return;
     }
+
+    const [hours, minutesPart] = selectedTime.split(':');
+    const [minutes, modifier] = minutesPart.split(' ');
+    let hourNumber = parseInt(hours, 10);
+
+    if (modifier === 'PM' && hourNumber < 12) {
+      hourNumber += 12;
+    }
+    if (modifier === 'AM' && hourNumber === 12) {
+      hourNumber = 0;
+    }
+    
+    const bookingDateTime = new Date(date);
+    bookingDateTime.setHours(hourNumber, parseInt(minutes, 10), 0, 0);
+
+    const newAppointment = {
+        id: `apt_${Date.now()}`,
+        studentName: 'Alice Johnson',
+        studentId: 'usr_1',
+        dateTime: bookingDateTime,
+        reason: reason || 'Not provided',
+        status: 'Confirmed' as const,
+    };
+
+    appointments.push(newAppointment);
+
     toast({
         title: "Appointment Booked!",
         description: `Your appointment is confirmed for ${format(date, "PPP")} at ${selectedTime}.`,
-    })
+    });
+
+    router.push('/student/dashboard');
   };
 
   return (
@@ -68,7 +100,13 @@ export default function BookAppointmentPage() {
                         <h2 className="text-xl font-semibold mb-2">3. Reason for Visit</h2>
                         <div className="grid w-full gap-1.5">
                             <Label htmlFor="reason">Please provide a brief reason (optional, 200 characters max)</Label>
-                            <Textarea placeholder="E.g. General check-up, flu symptoms..." id="reason" maxLength={200} />
+                            <Textarea 
+                                placeholder="E.g. General check-up, flu symptoms..." 
+                                id="reason" 
+                                maxLength={200}
+                                value={reason}
+                                onChange={(e) => setReason(e.target.value)}
+                            />
                         </div>
                     </div>
                     <Button onClick={handleBooking} size="lg" className="w-full">

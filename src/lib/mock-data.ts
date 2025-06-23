@@ -28,8 +28,9 @@ export type User = {
     { id: 'usr_1', name: 'Alice Johnson', email: 'alice@university.edu', role: 'student' },
     { id: 'usr_2', name: 'Bob Williams', email: 'bob@university.edu', role: 'student' },
     { id: 'usr_3', name: 'Dr. Carol White', email: 'carol.w@university.edu', role: 'doctor' },
-    { id: 'usr_4', name: 'David Green', email: 'david.g@university.edu', role: 'doctor' },
+    { id: 'usr_4', name: 'Dr. David Green', email: 'david.g@university.edu', role: 'doctor' },
     { id: 'usr_5', name: 'Eve Black', email: 'eve@university.edu', role: 'student' },
+    { id: 'usr_6', name: 'Charlie Brown', email: 'charlie@university.edu', role: 'student' },
   ];
   
   export const appointments: Appointment[] = [
@@ -53,8 +54,16 @@ export type User = {
         id: 'apt_3',
         studentName: 'Eve Black',
         studentId: 'usr_5',
-        dateTime: new Date(new Date().setHours(new Date().getHours() + 2)),
+        dateTime: new Date(new Date().setHours(14, 0, 0, 0)), // Today at 2 PM
         reason: 'Follow-up consultation.',
+        status: 'Confirmed',
+      },
+      {
+        id: 'apt_4',
+        studentName: 'Charlie Brown',
+        studentId: 'usr_6',
+        dateTime: new Date(new Date().setHours(10, 30, 0, 0)), // Today at 10:30 AM
+        reason: 'Sports injury check-up.',
         status: 'Confirmed',
       },
   ];

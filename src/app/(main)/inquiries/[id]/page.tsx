@@ -1,3 +1,5 @@
+'use client';
+
 import { inquiries } from "@/lib/mock-data";
 import {
   Card,
@@ -16,9 +18,38 @@ import { Separator } from "@/components/ui/separator";
 import { SmartResponse } from "@/components/smart-response";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 export default function InquiryDetailPage({ params }: { params: { id: string } }) {
+  const router = useRouter();
+  const { toast } = useToast();
   const inquiry = inquiries.find((i) => i.id === params.id);
+  const [responseText, setResponseText] = useState('');
+
+  const handleSendResponse = () => {
+    if (!inquiry) return;
+
+    if (!responseText.trim()) {
+        toast({
+            variant: "destructive",
+            title: "Error",
+            description: "Response cannot be empty."
+        });
+        return;
+    }
+
+    inquiry.response = responseText;
+    inquiry.status = 'Resolved';
+
+    toast({
+        title: "Response Sent",
+        description: "The inquiry has been marked as resolved."
+    });
+
+    router.push('/admin/dashboard');
+  };
 
   if (!inquiry) {
     return (
@@ -69,15 +100,21 @@ export default function InquiryDetailPage({ params }: { params: { id: string } }
                     <CardDescription>Use the Smart Response tool to assist in drafting your reply.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                   <SmartResponse inquiryText={inquiry.question} />
+                   <SmartResponse inquiryText={inquiry.question} onResponseGenerated={setResponseText} />
                    <Separator />
                    <div className="space-y-2">
                         <Label htmlFor="response">Your Final Response</Label>
-                        <Textarea id="response" placeholder="Enter your response here..." className="min-h-[150px]"/>
+                        <Textarea 
+                            id="response" 
+                            placeholder="Enter your response here..." 
+                            className="min-h-[150px]"
+                            value={responseText}
+                            onChange={(e) => setResponseText(e.target.value)}
+                        />
                    </div>
                 </CardContent>
                 <CardFooter>
-                    <Button>Send Response & Mark as Resolved</Button>
+                    <Button onClick={handleSendResponse}>Send Response & Mark as Resolved</Button>
                 </CardFooter>
             </Card>
         </div>
