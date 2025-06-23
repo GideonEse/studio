@@ -20,7 +20,7 @@ export function LoginForm() {
       <CardHeader>
         <CardTitle className="text-2xl font-headline">Login</CardTitle>
         <CardDescription>
-          Enter your email below to login to your account. For demo purposes, select a role to continue.
+          Enter your email below to login to your account. For demo purposes, select either the Student or Doctor role to continue.
         </CardDescription>
       </CardHeader>
       <CardContent className="grid gap-4">

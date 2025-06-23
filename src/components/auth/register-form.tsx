@@ -20,7 +20,7 @@ export function RegisterForm() {
       <CardHeader>
         <CardTitle className="text-2xl font-headline">Register</CardTitle>
         <CardDescription>
-          Create an account to get started.
+          Create an account to get started. New accounts are created as Students by default.
         </CardDescription>
       </CardHeader>
       <CardContent className="grid gap-4">

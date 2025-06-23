@@ -147,7 +147,7 @@ export default function DoctorDashboard() {
                   <TableCell>{user.name}</TableCell>
                   <TableCell>{user.email}</TableCell>
                   <TableCell>
-                    <Badge variant={user.role === 'doctor' ? 'destructive' : 'outline' }>{user.role}</Badge>
+                    <Badge variant={user.role === 'doctor' ? 'secondary' : 'outline' }>{user.role}</Badge>
                   </TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
