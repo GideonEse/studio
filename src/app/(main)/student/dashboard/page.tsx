@@ -1,7 +1,6 @@
 'use client';
 
 import Link from "next/link";
-import { appointments, inquiries } from "@/lib/mock-data";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -11,7 +10,7 @@ import { format } from "date-fns";
 import { useAuth } from "@/contexts/auth-context";
 
 export default function StudentDashboard() {
-  const { currentUser } = useAuth();
+  const { currentUser, appointments, inquiries } = useAuth();
 
   if (!currentUser) return null;
 
@@ -61,7 +60,7 @@ export default function StudentDashboard() {
             <TableBody>
               {upcomingAppointments.length > 0 ? upcomingAppointments.map((apt) => (
                 <TableRow key={apt.id}>
-                  <TableCell>{format(apt.dateTime, "PPP p")}</TableCell>
+                  <TableCell>{format(new Date(apt.dateTime), "PPP p")}</TableCell>
                   <TableCell>{apt.reason}</TableCell>
                   <TableCell><Badge variant="default">{apt.status}</Badge></TableCell>
                 </TableRow>
@@ -91,7 +90,7 @@ export default function StudentDashboard() {
             <TableBody>
               {inquiryHistory.map((inq) => (
                 <TableRow key={inq.id}>
-                  <TableCell>{format(inq.date, "PPP")}</TableCell>
+                  <TableCell>{format(new Date(inq.date), "PPP")}</TableCell>
                   <TableCell className="max-w-xs truncate">{inq.question}</TableCell>
                   <TableCell>
                     <Badge variant={inq.status === 'Resolved' ? 'secondary' : 'outline'}>{inq.status}</Badge>

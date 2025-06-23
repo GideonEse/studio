@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import { inquiries } from "@/lib/mock-data";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
@@ -16,19 +15,9 @@ export default function InquiriesPage() {
   const [activeTab, setActiveTab] = useState('new');
   const [question, setQuestion] = useState('');
   const { toast } = useToast();
-  const { currentUser } = useAuth();
+  const { currentUser, inquiries, addInquiry } = useAuth();
 
-  // Initialize history from mock data, but manage it in state to allow updates
-  const [inquiryHistory, setInquiryHistory] = useState(() => 
-    currentUser ? inquiries.filter(i => i.studentId === currentUser.id) : []
-  );
-
-  React.useEffect(() => {
-    if (currentUser) {
-        setInquiryHistory(inquiries.filter(i => i.studentId === currentUser.id));
-    }
-  }, [currentUser]);
-
+  const inquiryHistory = currentUser ? inquiries.filter(i => i.studentId === currentUser.id) : [];
 
   const handleSubmitInquiry = () => {
     if (!question.trim() || !currentUser) {
@@ -49,10 +38,7 @@ export default function InquiriesPage() {
       status: 'Pending' as const,
     };
 
-    // Add to the master list
-    inquiries.unshift(newInquiry); 
-    // Update local state to trigger re-render
-    setInquiryHistory(prev => [newInquiry, ...prev]);
+    addInquiry(newInquiry);
 
     toast({
       title: "Inquiry Submitted",
@@ -110,7 +96,7 @@ export default function InquiriesPage() {
                     <TableBody>
                     {inquiryHistory.length > 0 ? inquiryHistory.map((inq) => (
                         <TableRow key={inq.id}>
-                        <TableCell>{format(inq.date, "PPP")}</TableCell>
+                        <TableCell>{format(new Date(inq.date), "PPP")}</TableCell>
                         <TableCell className="max-w-xs truncate">{inq.question}</TableCell>
                         <TableCell>
                             <Badge variant={inq.status === 'Resolved' ? 'secondary' : 'outline'}>{inq.status}</Badge>

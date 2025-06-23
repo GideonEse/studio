@@ -1,7 +1,8 @@
 'use client';
 
 import * as React from "react";
-import { users as initialUsers, appointments, inquiries, type User } from "@/lib/mock-data";
+import { type User } from "@/lib/mock-data";
+import { useAuth } from "@/contexts/auth-context";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -40,7 +41,7 @@ const chartData = [
   }
 
 export default function DoctorDashboard() {
-  const [users, setUsers] = React.useState<User[]>(initialUsers);
+  const { users, appointments, inquiries, deleteUser } = useAuth();
   const [userToDelete, setUserToDelete] = React.useState<User | null>(null);
 
   const todaysAppointments = appointments.filter(a => new Date(a.dateTime).toDateString() === new Date().toDateString());
@@ -48,7 +49,7 @@ export default function DoctorDashboard() {
 
   const handleDeleteUser = () => {
     if (!userToDelete) return;
-    setUsers(prevUsers => prevUsers.filter(u => u.id !== userToDelete.id));
+    deleteUser(userToDelete.id);
     setUserToDelete(null);
   }
 
@@ -73,7 +74,7 @@ export default function DoctorDashboard() {
                       <TableBody>
                       {todaysAppointments.length > 0 ? todaysAppointments.map((apt) => (
                           <TableRow key={apt.id}>
-                          <TableCell>{format(apt.dateTime, "p")}</TableCell>
+                          <TableCell>{format(new Date(apt.dateTime), "p")}</TableCell>
                           <TableCell>{apt.studentName}</TableCell>
                           <TableCell>{apt.reason}</TableCell>
                           </TableRow>
@@ -105,7 +106,7 @@ export default function DoctorDashboard() {
                       <TableBody>
                       {pendingInquiries.map((inq) => (
                           <TableRow key={inq.id}>
-                          <TableCell>{format(inq.date, "PPP")}</TableCell>
+                          <TableCell>{format(new Date(inq.date), "PPP")}</TableCell>
                           <TableCell>{inq.studentName}</TableCell>
                           <TableCell className="max-w-sm truncate">{inq.question}</TableCell>
                           <TableCell className="text-right">

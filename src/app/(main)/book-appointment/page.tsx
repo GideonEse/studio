@@ -7,7 +7,6 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { format, startOfDay } from 'date-fns';
-import { appointments } from '@/lib/mock-data';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/auth-context';
 
@@ -23,15 +22,15 @@ export default function BookAppointmentPage() {
   const [reason, setReason] = React.useState('');
   const { toast } = useToast();
   const router = useRouter();
-  const { currentUser } = useAuth();
+  const { currentUser, appointments, addAppointment } = useAuth();
 
   const bookedTimes = React.useMemo(() => {
     if (!date) return [];
     // Get all appointments for the selected day
     return appointments
-      .filter(apt => apt.status === 'Confirmed' && startOfDay(apt.dateTime).getTime() === startOfDay(date).getTime())
-      .map(apt => format(apt.dateTime, 'hh:mm a'));
-  }, [date]);
+      .filter(apt => apt.status === 'Confirmed' && startOfDay(new Date(apt.dateTime)).getTime() === startOfDay(date).getTime())
+      .map(apt => format(new Date(apt.dateTime), 'hh:mm a'));
+  }, [date, appointments]);
 
   const handleBooking = () => {
     if (!date || !selectedTime || !currentUser) {
@@ -66,7 +65,7 @@ export default function BookAppointmentPage() {
         status: 'Confirmed' as const,
     };
 
-    appointments.push(newAppointment);
+    addAppointment(newAppointment);
 
     toast({
         title: "Appointment Booked!",

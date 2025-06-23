@@ -1,6 +1,6 @@
 'use client';
 
-import { inquiries } from "@/lib/mock-data";
+import { useAuth } from "@/contexts/auth-context";
 import {
   Card,
   CardContent,
@@ -25,6 +25,7 @@ import { useToast } from "@/hooks/use-toast";
 export default function InquiryDetailPage({ params }: { params: { id: string } }) {
   const router = useRouter();
   const { toast } = useToast();
+  const { inquiries, updateInquiry } = useAuth();
   const inquiry = inquiries.find((i) => i.id === params.id);
   const [responseText, setResponseText] = useState('');
 
@@ -40,8 +41,13 @@ export default function InquiryDetailPage({ params }: { params: { id: string } }
         return;
     }
 
-    inquiry.response = responseText;
-    inquiry.status = 'Resolved';
+    const updatedInquiry = {
+        ...inquiry,
+        response: responseText,
+        status: 'Resolved' as const,
+    };
+
+    updateInquiry(updatedInquiry);
 
     toast({
         title: "Response Sent",
@@ -79,7 +85,7 @@ export default function InquiryDetailPage({ params }: { params: { id: string } }
                 </CardHeader>
                 <CardContent className="space-y-2 text-sm">
                     <p><strong>Name:</strong> {inquiry.studentName}</p>
-                    <p><strong>Date Submitted:</strong> {format(inquiry.date, "PPP")}</p>
+                    <p><strong>Date Submitted:</strong> {format(new Date(inquiry.date), "PPP")}</p>
                     <p><strong>Status:</strong> <Badge variant={inquiry.status === 'Resolved' ? 'secondary' : 'outline'}>{inquiry.status}</Badge></p>
                 </CardContent>
             </Card>
