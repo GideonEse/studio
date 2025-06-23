@@ -1,12 +1,12 @@
 'use client';
 import * as React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { format } from 'date-fns';
+import { format, startOfDay } from 'date-fns';
 import { appointments } from '@/lib/mock-data';
 import { useRouter } from 'next/navigation';
 
@@ -22,6 +22,14 @@ export default function BookAppointmentPage() {
   const [reason, setReason] = React.useState('');
   const { toast } = useToast();
   const router = useRouter();
+
+  const bookedTimes = React.useMemo(() => {
+    if (!date) return [];
+    // Get all appointments for the selected day
+    return appointments
+      .filter(apt => apt.status === 'Confirmed' && startOfDay(apt.dateTime).getTime() === startOfDay(date).getTime())
+      .map(apt => format(apt.dateTime, 'hh:mm a'));
+  }, [date]);
 
   const handleBooking = () => {
     if (!date || !selectedTime) {
@@ -85,15 +93,19 @@ export default function BookAppointmentPage() {
                     <div>
                         <h2 className="text-xl font-semibold mb-4">2. Select a Time</h2>
                         <div className="grid grid-cols-3 gap-2">
-                        {timeSlots.map(time => (
-                            <Button
-                            key={time}
-                            variant={selectedTime === time ? "default" : "outline"}
-                            onClick={() => setSelectedTime(time)}
-                            >
-                            {time}
-                            </Button>
-                        ))}
+                        {timeSlots.map(time => {
+                            const isBooked = bookedTimes.includes(time);
+                            return (
+                                <Button
+                                key={time}
+                                variant={selectedTime === time ? "default" : "outline"}
+                                onClick={() => setSelectedTime(time)}
+                                disabled={isBooked}
+                                >
+                                {time}
+                                </Button>
+                            )
+                        })}
                         </div>
                     </div>
                     <div>

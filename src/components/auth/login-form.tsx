@@ -26,11 +26,11 @@ export function LoginForm() {
       <CardContent className="grid gap-4">
         <div className="grid gap-2">
           <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" placeholder="m@example.com" required disabled />
+          <Input id="email" type="email" placeholder="m@example.com" required />
         </div>
         <div className="grid gap-2">
           <Label htmlFor="password">Password</Label>
-          <Input id="password" type="password" required disabled />
+          <Input id="password" type="password" required />
         </div>
         <div className="grid grid-cols-2 gap-2 pt-4">
             <Button asChild className="col-span-2">
