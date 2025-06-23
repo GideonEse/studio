@@ -16,7 +16,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
-import { users } from '@/lib/mock-data';
+import { users, type User } from '@/lib/mock-data';
 
 export function RegisterForm() {
   const { toast } = useToast();
@@ -24,6 +24,7 @@ export function RegisterForm() {
   const [fullName, setFullName] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const [role, setRole] = React.useState<User['role']>('student');
 
   const handleRegister = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -40,7 +41,7 @@ export function RegisterForm() {
       id: `usr_${users.length + 1}`,
       name: fullName,
       email: email,
-      role: 'student' as const,
+      role: role,
     };
     
     users.push(newUser);
@@ -58,7 +59,7 @@ export function RegisterForm() {
       <CardHeader>
         <CardTitle className="text-2xl font-headline">Register</CardTitle>
         <CardDescription>
-          Create an account to get started. New accounts are created as Students by default.
+          Create an account to get started. Choose your role below.
         </CardDescription>
       </CardHeader>
       <CardContent className="grid gap-4">
@@ -76,12 +77,13 @@ export function RegisterForm() {
         </div>
          <div className="grid gap-2">
           <Label htmlFor="role">Role</Label>
-            <Select defaultValue="student" disabled>
+            <Select value={role} onValueChange={(value) => setRole(value as User['role'])}>
                 <SelectTrigger>
                     <SelectValue placeholder="Select your role" />
                 </SelectTrigger>
                 <SelectContent>
                     <SelectItem value="student">Student</SelectItem>
+                    <SelectItem value="doctor">Doctor</SelectItem>
                 </SelectContent>
             </Select>
         </div>
