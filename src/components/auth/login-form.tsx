@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Stethoscope, User } from 'lucide-react';
+import { Briefcase, Stethoscope, User } from 'lucide-react';
 
 export function LoginForm() {
   return (
@@ -20,13 +20,13 @@ export function LoginForm() {
       <CardHeader>
         <CardTitle className="text-2xl font-headline">Login</CardTitle>
         <CardDescription>
-          Enter your email below to login to your account. For demo purposes, select either the Student or Doctor role to continue.
+          Enter your matric number below to login. For demo purposes, select a role to continue.
         </CardDescription>
       </CardHeader>
       <CardContent className="grid gap-4">
         <div className="grid gap-2">
-          <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" placeholder="m@example.com" required />
+          <Label htmlFor="matricNumber">Matric Number</Label>
+          <Input id="matricNumber" type="text" placeholder="S012345" required />
         </div>
         <div className="grid gap-2">
           <Label htmlFor="password">Password</Label>
@@ -38,6 +38,9 @@ export function LoginForm() {
             </Button>
             <Button asChild variant="secondary" className="col-span-2">
                 <Link href="/admin/dashboard"><Stethoscope/>Sign in as Doctor</Link>
+            </Button>
+            <Button asChild variant="outline" className="col-span-2">
+                <Link href="/admin/dashboard"><Briefcase/>Sign in as Staff</Link>
             </Button>
         </div>
       </CardContent>

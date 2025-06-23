@@ -22,13 +22,13 @@ export function RegisterForm() {
   const { toast } = useToast();
   const router = useRouter();
   const [fullName, setFullName] = React.useState('');
-  const [email, setEmail] = React.useState('');
+  const [matricNumber, setMatricNumber] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [role, setRole] = React.useState<User['role']>('student');
 
   const handleRegister = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    if (!fullName || !email || !password) {
+    if (!fullName || !matricNumber || !password) {
       toast({
         variant: 'destructive',
         title: 'Registration Failed',
@@ -40,7 +40,7 @@ export function RegisterForm() {
     const newUser = {
       id: `usr_${users.length + 1}`,
       name: fullName,
-      email: email,
+      matricNumber: matricNumber,
       role: role,
     };
     
@@ -68,8 +68,8 @@ export function RegisterForm() {
             <Input id="name" placeholder="John Doe" required value={fullName} onChange={(e) => setFullName(e.target.value)} />
         </div>
         <div className="grid gap-2">
-          <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" placeholder="m@example.com" required value={email} onChange={(e) => setEmail(e.target.value)}/>
+          <Label htmlFor="matricNumber">Matric Number</Label>
+          <Input id="matricNumber" type="text" placeholder="e.g. S012345" required value={matricNumber} onChange={(e) => setMatricNumber(e.target.value)}/>
         </div>
         <div className="grid gap-2">
           <Label htmlFor="password">Password</Label>
@@ -83,6 +83,7 @@ export function RegisterForm() {
                 </SelectTrigger>
                 <SelectContent>
                     <SelectItem value="student">Student</SelectItem>
+                    <SelectItem value="staff">Staff</SelectItem>
                     <SelectItem value="doctor">Doctor</SelectItem>
                 </SelectContent>
             </Select>

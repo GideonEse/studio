@@ -157,7 +157,7 @@ export default function DoctorDashboard() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Name</TableHead>
-                  <TableHead>Email</TableHead>
+                  <TableHead>Matric Number</TableHead>
                   <TableHead>Role</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
@@ -166,9 +166,12 @@ export default function DoctorDashboard() {
                 {users.map((user) => (
                   <TableRow key={user.id}>
                     <TableCell>{user.name}</TableCell>
-                    <TableCell>{user.email}</TableCell>
+                    <TableCell>{user.matricNumber}</TableCell>
                     <TableCell>
-                      <Badge variant={user.role === 'doctor' ? 'secondary' : 'outline' }>{user.role}</Badge>
+                      <Badge variant={
+                          user.role === 'doctor' ? 'secondary' : 
+                          user.role === 'staff' ? 'default' : 'outline'
+                        }>{user.role}</Badge>
                     </TableCell>
                     <TableCell className="text-right">
                       <DropdownMenu>
