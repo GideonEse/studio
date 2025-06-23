@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, CalendarPlus, MessageSquareQuestion } from "lucide-react";
+import { ArrowRight, CalendarPlus, MessageSquareQuote } from "lucide-react";
 import { format } from "date-fns";
 
 export default function StudentDashboard() {
@@ -27,7 +27,7 @@ export default function StudentDashboard() {
         </Card>
         <Card className="flex flex-col">
             <CardHeader>
-                <CardTitle className="flex items-center gap-2 font-headline"><MessageSquareQuestion/> Ask a Question</CardTitle>
+                <CardTitle className="flex items-center gap-2 font-headline"><MessageSquareQuote/> Ask a Question</CardTitle>
                 <CardDescription>Have a non-urgent health question? Ask our staff.</CardDescription>
             </CardHeader>
             <CardContent className="flex-grow flex items-end">

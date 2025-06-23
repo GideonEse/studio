@@ -12,7 +12,7 @@ import {
 import {
     LayoutDashboard,
     CalendarPlus,
-    MessageSquareQuestion,
+    MessageSquareQuote,
     Users,
     LogOut,
     ShieldCheck,
@@ -24,7 +24,7 @@ import Link from 'next/link';
 const studentLinks = [
   { href: '/student/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/book-appointment', label: 'Book Appointment', icon: CalendarPlus },
-  { href: '/inquiries', label: 'My Inquiries', icon: MessageSquareQuestion },
+  { href: '/inquiries', label: 'My Inquiries', icon: MessageSquareQuote },
 ];
 
 const staffLinks = [
