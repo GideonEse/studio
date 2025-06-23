@@ -2,7 +2,7 @@ export type User = {
     id: string;
     name: string;
     email: string;
-    role: 'student' | 'staff' | 'admin';
+    role: 'student' | 'doctor';
   };
   
   export type Appointment = {
@@ -27,8 +27,8 @@ export type User = {
   export const users: User[] = [
     { id: 'usr_1', name: 'Alice Johnson', email: 'alice@university.edu', role: 'student' },
     { id: 'usr_2', name: 'Bob Williams', email: 'bob@university.edu', role: 'student' },
-    { id: 'usr_3', name: 'Dr. Carol White', email: 'carol.w@university.edu', role: 'staff' },
-    { id: 'usr_4', name: 'David Green', email: 'david.g@university.edu', role: 'admin' },
+    { id: 'usr_3', name: 'Dr. Carol White', email: 'carol.w@university.edu', role: 'doctor' },
+    { id: 'usr_4', name: 'David Green', email: 'david.g@university.edu', role: 'doctor' },
     { id: 'usr_5', name: 'Eve Black', email: 'eve@university.edu', role: 'student' },
   ];
   

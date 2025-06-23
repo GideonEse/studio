@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Building, ShieldCheck, User } from 'lucide-react';
+import { Stethoscope, User } from 'lucide-react';
 
 export function LoginForm() {
   return (
@@ -32,15 +32,12 @@ export function LoginForm() {
           <Label htmlFor="password">Password</Label>
           <Input id="password" type="password" required disabled />
         </div>
-        <div className="grid gap-2 pt-4">
-            <Button asChild>
+        <div className="grid grid-cols-2 gap-2 pt-4">
+            <Button asChild className="col-span-2">
                 <Link href="/student/dashboard"><User/>Sign in as Student</Link>
             </Button>
-            <Button asChild variant="secondary">
-                <Link href="/staff/dashboard"><Building/>Sign in as Staff</Link>
-            </Button>
-            <Button asChild variant="outline">
-                <Link href="/admin/dashboard"><ShieldCheck/>Sign in as Admin</Link>
+            <Button asChild variant="secondary" className="col-span-2">
+                <Link href="/admin/dashboard"><Stethoscope/>Sign in as Doctor</Link>
             </Button>
         </div>
       </CardContent>

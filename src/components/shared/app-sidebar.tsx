@@ -13,10 +13,8 @@ import {
     LayoutDashboard,
     CalendarPlus,
     MessageSquareQuote,
-    Users,
     LogOut,
-    ShieldCheck,
-    Building,
+    Stethoscope,
     User
 } from 'lucide-react';
 import Link from 'next/link';
@@ -27,11 +25,7 @@ const studentLinks = [
   { href: '/inquiries', label: 'My Inquiries', icon: MessageSquareQuote },
 ];
 
-const staffLinks = [
-  { href: '/staff/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-];
-
-const adminLinks = [
+const doctorLinks = [
   { href: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
 ];
 
@@ -39,11 +33,8 @@ const getRoleAndLinks = (pathname: string) => {
     if (pathname.startsWith('/student')) {
         return { role: 'Student', icon: <User className="w-5 h-5"/>, links: studentLinks };
     }
-    if (pathname.startsWith('/staff')) {
-        return { role: 'Staff', icon: <Building className="w-5 h-5"/>, links: staffLinks };
-    }
-    if (pathname.startsWith('/admin')) {
-        return { role: 'Admin', icon: <ShieldCheck className="w-5 h-5"/>, links: adminLinks };
+    if (pathname.startsWith('/admin') || pathname.startsWith('/inquiries/')) {
+        return { role: 'Doctor', icon: <Stethoscope className="w-5 h-5"/>, links: doctorLinks };
     }
     return { role: 'User', icon: <User className="w-5 h-5"/>, links: [] };
 }
@@ -67,7 +58,7 @@ export function AppSidebar() {
             <SidebarMenuItem key={link.href}>
               <Link href={link.href} className="w-full">
                 <SidebarMenuButton
-                  isActive={pathname === link.href}
+                  isActive={pathname.startsWith(link.href)}
                   tooltip={link.label}
                 >
                   <link.icon />

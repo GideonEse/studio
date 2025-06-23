@@ -38,13 +38,12 @@ export function RegisterForm() {
         </div>
          <div className="grid gap-2">
           <Label htmlFor="role">Role</Label>
-            <Select>
+            <Select defaultValue="student">
                 <SelectTrigger>
                     <SelectValue placeholder="Select your role" />
                 </SelectTrigger>
                 <SelectContent>
                     <SelectItem value="student">Student</SelectItem>
-                    <SelectItem value="staff">Staff</SelectItem>
                 </SelectContent>
             </Select>
         </div>

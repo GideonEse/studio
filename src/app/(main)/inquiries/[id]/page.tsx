@@ -26,7 +26,7 @@ export default function InquiryDetailPage({ params }: { params: { id: string } }
             <h1 className="text-2xl font-bold">Inquiry not found</h1>
             <p>The requested inquiry could not be located.</p>
             <Button asChild variant="link" className="mt-4">
-                <Link href="/staff/dashboard">Back to Dashboard</Link>
+                <Link href="/admin/dashboard">Back to Dashboard</Link>
             </Button>
         </div>
     );
@@ -36,7 +36,7 @@ export default function InquiryDetailPage({ params }: { params: { id: string } }
     <div className="space-y-6">
         <div>
             <Button asChild variant="outline" size="sm" className="mb-4">
-                <Link href="/staff/dashboard"><ArrowLeft className="mr-2 h-4 w-4" /> Back to Dashboard</Link>
+                <Link href="/admin/dashboard"><ArrowLeft className="mr-2 h-4 w-4" /> Back to Dashboard</Link>
             </Button>
             <h1 className="text-3xl font-bold font-headline">Inquiry Details</h1>
         </div>
