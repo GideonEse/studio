@@ -44,7 +44,9 @@ export default function DoctorDashboard() {
   const { users, appointments, inquiries, deleteUser } = useAuth();
   const [userToDelete, setUserToDelete] = React.useState<User | null>(null);
 
-  const todaysAppointments = appointments.filter(a => new Date(a.dateTime).toDateString() === new Date().toDateString());
+  const upcomingAppointments = appointments
+    .filter(a => new Date(a.dateTime) >= new Date())
+    .sort((a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime());
   const pendingInquiries = inquiries.filter(i => i.status === 'Pending');
 
   const handleDeleteUser = () => {
@@ -59,28 +61,30 @@ export default function DoctorDashboard() {
           <div className="grid md:grid-cols-2 gap-6">
               <Card>
                   <CardHeader>
-                  <CardTitle className="font-headline">Today's Appointments</CardTitle>
-                  <CardDescription>A list of all confirmed appointments for today.</CardDescription>
+                  <CardTitle className="font-headline">Upcoming Appointments</CardTitle>
+                  <CardDescription>A list of all upcoming confirmed appointments.</CardDescription>
                   </CardHeader>
                   <CardContent>
                   <Table>
                       <TableHeader>
                       <TableRow>
+                          <TableHead>Date</TableHead>
                           <TableHead>Time</TableHead>
                           <TableHead>Student Name</TableHead>
                           <TableHead>Reason</TableHead>
                       </TableRow>
                       </TableHeader>
                       <TableBody>
-                      {todaysAppointments.length > 0 ? todaysAppointments.map((apt) => (
+                      {upcomingAppointments.length > 0 ? upcomingAppointments.map((apt) => (
                           <TableRow key={apt.id}>
+                          <TableCell>{format(new Date(apt.dateTime), "PPP")}</TableCell>
                           <TableCell>{format(new Date(apt.dateTime), "p")}</TableCell>
                           <TableCell>{apt.studentName}</TableCell>
                           <TableCell>{apt.reason}</TableCell>
                           </TableRow>
                       )) : (
                           <TableRow>
-                          <TableCell colSpan={3} className="text-center">No appointments scheduled for today.</TableCell>
+                          <TableCell colSpan={4} className="text-center">No upcoming appointments.</TableCell>
                           </TableRow>
                       )}
                       </TableBody>
