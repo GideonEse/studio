@@ -27,7 +27,57 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [userList, setUserList] = React.useState<User[]>(initialUsers);
   const [appointments, setAppointments] = React.useState<Appointment[]>(initialAppointments);
   const [inquiries, setInquiries] = React.useState<Inquiry[]>(initialInquiries);
+  const [isLoaded, setIsLoaded] = React.useState(false);
   const router = useRouter();
+
+  React.useEffect(() => {
+    try {
+        const savedUsers = localStorage.getItem('hms_users');
+        if (savedUsers) setUserList(JSON.parse(savedUsers));
+
+        const savedAppointments = localStorage.getItem('hms_appointments');
+        if (savedAppointments) {
+            setAppointments(JSON.parse(savedAppointments).map((a: any) => ({...a, dateTime: new Date(a.dateTime)})));
+        }
+
+        const savedInquiries = localStorage.getItem('hms_inquiries');
+        if (savedInquiries) {
+            setInquiries(JSON.parse(savedInquiries).map((i: any) => ({...i, date: new Date(i.date)})));
+        }
+
+        const savedCurrentUser = localStorage.getItem('hms_currentUser');
+        if (savedCurrentUser) {
+            setCurrentUser(JSON.parse(savedCurrentUser));
+        }
+    } catch (error) {
+        console.error("Failed to load data from localStorage", error);
+    }
+    setIsLoaded(true);
+  }, []);
+
+  React.useEffect(() => {
+    if (!isLoaded) return;
+    localStorage.setItem('hms_users', JSON.stringify(userList));
+  }, [userList, isLoaded]);
+
+  React.useEffect(() => {
+      if (!isLoaded) return;
+      localStorage.setItem('hms_appointments', JSON.stringify(appointments));
+  }, [appointments, isLoaded]);
+
+  React.useEffect(() => {
+      if (!isLoaded) return;
+      localStorage.setItem('hms_inquiries', JSON.stringify(inquiries));
+  }, [inquiries, isLoaded]);
+
+  React.useEffect(() => {
+    if (!isLoaded) return;
+    if (currentUser) {
+        localStorage.setItem('hms_currentUser', JSON.stringify(currentUser));
+    } else {
+        localStorage.removeItem('hms_currentUser');
+    }
+  }, [currentUser, isLoaded]);
 
   const login = async (matricNumber: string, password?: string): Promise<User | null> => {
     const user = userList.find(u => u.matricNumber === matricNumber && u.password === password);
@@ -40,6 +90,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = () => {
     setCurrentUser(null);
+    localStorage.removeItem('hms_currentUser');
     router.push('/');
   };
 
