@@ -18,12 +18,13 @@ import { Separator } from "@/components/ui/separator";
 import { SmartResponse } from "@/components/smart-response";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 
-export default function InquiryDetailPage({ params }: { params: { id: string } }) {
+export default function InquiryDetailPage() {
   const router = useRouter();
+  const params = useParams();
   const { toast } = useToast();
   const { inquiries, updateInquiry } = useAuth();
   const inquiry = inquiries.find((i) => i.id === params.id);
