@@ -14,7 +14,10 @@ export default function StudentDashboard() {
 
   if (!currentUser) return null;
 
-  const upcomingAppointments = appointments.filter(a => a.studentId === currentUser.id && a.status === 'Confirmed' && new Date(a.dateTime) >= new Date());
+  const myAppointments = appointments
+    .filter(a => a.studentId === currentUser.id)
+    .sort((a, b) => new Date(b.dateTime).getTime() - new Date(a.dateTime).getTime());
+    
   const inquiryHistory = inquiries.filter(i => i.studentId === currentUser.id);
 
   return (
@@ -22,12 +25,12 @@ export default function StudentDashboard() {
       <div className="grid md:grid-cols-2 gap-6">
         <Card className="flex flex-col">
             <CardHeader>
-                <CardTitle className="flex items-center gap-2 font-headline"><CalendarPlus/> Book an Appointment</CardTitle>
+                <CardTitle className="flex items-center gap-2 font-headline"><CalendarPlus/> Request an Appointment</CardTitle>
                 <CardDescription>Need to see a doctor? Schedule your visit here.</CardDescription>
             </CardHeader>
             <CardContent className="flex-grow flex items-end">
                 <Button asChild>
-                    <Link href="/book-appointment">Book Now <ArrowRight className="ml-2"/></Link>
+                    <Link href="/book-appointment">Request Now <ArrowRight className="ml-2"/></Link>
                 </Button>
             </CardContent>
         </Card>
@@ -46,7 +49,7 @@ export default function StudentDashboard() {
       
       <Card>
         <CardHeader>
-          <CardTitle className="font-headline">Upcoming Appointments</CardTitle>
+          <CardTitle className="font-headline">My Appointments</CardTitle>
         </CardHeader>
         <CardContent>
           <Table>
@@ -55,18 +58,26 @@ export default function StudentDashboard() {
                 <TableHead>Date & Time</TableHead>
                 <TableHead>Reason</TableHead>
                 <TableHead>Status</TableHead>
+                <TableHead>Doctor's Note</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {upcomingAppointments.length > 0 ? upcomingAppointments.map((apt) => (
+              {myAppointments.length > 0 ? myAppointments.map((apt) => (
                 <TableRow key={apt.id}>
                   <TableCell>{format(new Date(apt.dateTime), "PPP p")}</TableCell>
                   <TableCell>{apt.reason}</TableCell>
-                  <TableCell><Badge variant="default">{apt.status}</Badge></TableCell>
+                  <TableCell>
+                    <Badge variant={
+                        apt.status === 'Pending' ? 'outline' :
+                        apt.status === 'Confirmed' ? 'default' :
+                        apt.status === 'Cancelled' ? 'destructive' : 'secondary'
+                    }>{apt.status}</Badge>
+                  </TableCell>
+                  <TableCell>{apt.doctorMessage || '—'}</TableCell>
                 </TableRow>
               )) : (
                 <TableRow>
-                  <TableCell colSpan={3} className="text-center">No upcoming appointments.</TableCell>
+                  <TableCell colSpan={4} className="text-center">No appointments found.</TableCell>
                 </TableRow>
               )}
             </TableBody>

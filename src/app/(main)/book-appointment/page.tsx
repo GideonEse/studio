@@ -6,55 +6,33 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { format, startOfDay } from 'date-fns';
+import { format } from 'date-fns';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/auth-context';
-
-const timeSlots = [
-  '09:00 AM', '09:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM',
-  '01:00 PM', '01:30 PM', '02:00 PM', '02:30 PM', '03:00 PM', '03:30 PM',
-  '04:00 PM',
-];
+import { Input } from '@/components/ui/input';
 
 export default function BookAppointmentPage() {
   const [date, setDate] = React.useState<Date | undefined>(new Date());
-  const [selectedTime, setSelectedTime] = React.useState<string | null>(null);
+  const [time, setTime] = React.useState('');
   const [reason, setReason] = React.useState('');
   const { toast } = useToast();
   const router = useRouter();
-  const { currentUser, appointments, addAppointment } = useAuth();
-
-  const bookedTimes = React.useMemo(() => {
-    if (!date) return [];
-    // Get all appointments for the selected day
-    return appointments
-      .filter(apt => apt.status === 'Confirmed' && startOfDay(new Date(apt.dateTime)).getTime() === startOfDay(date).getTime())
-      .map(apt => format(new Date(apt.dateTime), 'hh:mm a'));
-  }, [date, appointments]);
+  const { currentUser, addAppointment } = useAuth();
 
   const handleBooking = () => {
-    if (!date || !selectedTime || !currentUser) {
+    if (!date || !time || !currentUser) {
         toast({
             variant: "destructive",
             title: "Booking Failed",
-            description: "Please select a date and time slot.",
+            description: "Please select a date and time for your request.",
         })
         return;
     }
 
-    const [hours, minutesPart] = selectedTime.split(':');
-    const [minutes, modifier] = minutesPart.split(' ');
-    let hourNumber = parseInt(hours, 10);
-
-    if (modifier === 'PM' && hourNumber < 12) {
-      hourNumber += 12;
-    }
-    if (modifier === 'AM' && hourNumber === 12) {
-      hourNumber = 0;
-    }
+    const [hourNumber, minuteNumber] = time.split(':').map(Number);
     
     const bookingDateTime = new Date(date);
-    bookingDateTime.setHours(hourNumber, parseInt(minutes, 10), 0, 0);
+    bookingDateTime.setHours(hourNumber, minuteNumber, 0, 0);
 
     const newAppointment = {
         id: `apt_${Date.now()}`,
@@ -62,14 +40,14 @@ export default function BookAppointmentPage() {
         studentId: currentUser.id,
         dateTime: bookingDateTime,
         reason: reason || 'Not provided',
-        status: 'Confirmed' as const,
+        status: 'Pending' as const,
     };
 
     addAppointment(newAppointment);
 
     toast({
-        title: "Appointment Booked!",
-        description: `Your appointment is confirmed for ${format(date, "PPP")} at ${selectedTime}.`,
+        title: "Appointment Requested",
+        description: `Your request for ${format(bookingDateTime, "PPP p")} has been sent. You will be notified once it's confirmed.`,
     });
 
     router.push('/student/dashboard');
@@ -77,7 +55,7 @@ export default function BookAppointmentPage() {
 
   return (
     <div>
-        <h1 className="text-3xl font-bold mb-6 font-headline">Book an Appointment</h1>
+        <h1 className="text-3xl font-bold mb-6 font-headline">Request an Appointment</h1>
         <Card>
             <CardContent className="p-6 grid md:grid-cols-2 gap-8">
                 <div>
@@ -92,22 +70,12 @@ export default function BookAppointmentPage() {
                 </div>
                 <div className="space-y-6">
                     <div>
-                        <h2 className="text-xl font-semibold mb-4">2. Select a Time</h2>
-                        <div className="grid grid-cols-3 gap-2">
-                        {timeSlots.map(time => {
-                            const isBooked = bookedTimes.includes(time);
-                            return (
-                                <Button
-                                key={time}
-                                variant={selectedTime === time ? "default" : "outline"}
-                                onClick={() => setSelectedTime(time)}
-                                disabled={isBooked}
-                                >
-                                {time}
-                                </Button>
-                            )
-                        })}
-                        </div>
+                        <h2 className="text-xl font-semibold mb-4">2. Suggest a Time</h2>
+                        <Input 
+                            type="time"
+                            value={time}
+                            onChange={(e) => setTime(e.target.value)}
+                        />
                     </div>
                     <div>
                         <h2 className="text-xl font-semibold mb-2">3. Reason for Visit</h2>
@@ -123,7 +91,7 @@ export default function BookAppointmentPage() {
                         </div>
                     </div>
                     <Button onClick={handleBooking} size="lg" className="w-full">
-                        Confirm Booking
+                        Submit Request
                     </Button>
                 </div>
             </CardContent>

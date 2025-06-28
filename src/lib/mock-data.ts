@@ -12,7 +12,8 @@ export type User = {
     studentId: string;
     dateTime: Date;
     reason: string;
-    status: 'Confirmed' | 'Completed' | 'Cancelled';
+    status: 'Pending' | 'Confirmed' | 'Completed' | 'Cancelled';
+    doctorMessage?: string;
   };
   
   export type Inquiry = {

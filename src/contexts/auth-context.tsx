@@ -12,6 +12,7 @@ interface AuthContextType {
   register: (newUser: Omit<User, 'id'>) => Promise<User | null>;
   appointments: Appointment[];
   addAppointment: (appointment: Appointment) => void;
+  updateAppointment: (updatedAppointment: Appointment) => void;
   inquiries: Inquiry[];
   addInquiry: (inquiry: Inquiry) => void;
   updateInquiry: (updatedInquiry: Inquiry) => void;
@@ -54,6 +55,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const addAppointment = (appointment: Appointment) => {
     setAppointments(prev => [...prev, appointment]);
   };
+
+  const updateAppointment = (updatedAppointment: Appointment) => {
+    setAppointments(prev => prev.map(a => a.id === updatedAppointment.id ? updatedAppointment : a));
+  };
   
   const addInquiry = (inquiry: Inquiry) => {
     setInquiries(prev => [inquiry, ...prev]);
@@ -76,6 +81,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         register, 
         appointments, 
         addAppointment,
+        updateAppointment,
         inquiries,
         addInquiry,
         updateInquiry,
