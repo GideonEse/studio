@@ -14,8 +14,6 @@ import { format } from "date-fns";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
-import { SmartResponse } from "@/components/smart-response";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { useRouter, useParams } from "next/navigation";
@@ -104,17 +102,15 @@ export default function InquiryDetailPage() {
             <Card>
                 <CardHeader>
                     <CardTitle>Respond to Inquiry</CardTitle>
-                    <CardDescription>Use the Smart Response tool to assist in drafting your reply.</CardDescription>
+                    <CardDescription>Draft your reply to the student's question below.</CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                   <SmartResponse inquiryText={inquiry.question} onResponseGenerated={setResponseText} />
-                   <Separator />
+                <CardContent>
                    <div className="space-y-2">
-                        <Label htmlFor="response">Your Final Response</Label>
+                        <Label htmlFor="response">Your Response</Label>
                         <Textarea 
                             id="response" 
                             placeholder="Enter your response here..." 
-                            className="min-h-[150px]"
+                            className="min-h-[200px]"
                             value={responseText}
                             onChange={(e) => setResponseText(e.target.value)}
                         />
