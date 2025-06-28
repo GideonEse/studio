@@ -46,7 +46,7 @@ export function LoginForm() {
         toast({
           variant: 'destructive',
           title: 'Login Failed',
-          description: 'Invalid matric number or password.',
+          description: 'Invalid matric/staff number or password.',
         });
       }
     } catch (error) {
@@ -67,16 +67,16 @@ export function LoginForm() {
         <CardHeader>
           <CardTitle className="text-2xl font-headline">Login</CardTitle>
           <CardDescription>
-            Enter your matric number and password to login.
+            Enter your matric/staff number and password to login.
           </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
           <div className="grid gap-2">
-            <Label htmlFor="matricNumber">Matric Number</Label>
+            <Label htmlFor="matricNumber">Matric / Staff Number</Label>
             <Input 
               id="matricNumber" 
               type="text" 
-              placeholder="S012345" 
+              placeholder="S012345 / D10001" 
               required 
               value={matricNumber}
               onChange={(e) => setMatricNumber(e.target.value)}

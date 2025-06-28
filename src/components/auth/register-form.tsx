@@ -28,6 +28,9 @@ export function RegisterForm() {
   const [password, setPassword] = React.useState('');
   const [role, setRole] = React.useState<User['role']>('student');
 
+  const idLabel = role === 'student' ? 'Matric Number' : 'Staff Number';
+  const idPlaceholder = role === 'student' ? 'e.g. S012345' : 'e.g. D10001';
+
   const handleRegister = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (!fullName || !matricNumber || !password) {
@@ -70,8 +73,8 @@ export function RegisterForm() {
             <Input id="name" placeholder="John Doe" required value={fullName} onChange={(e) => setFullName(e.target.value)} />
         </div>
         <div className="grid gap-2">
-          <Label htmlFor="matricNumber">Matric Number</Label>
-          <Input id="matricNumber" type="text" placeholder="e.g. S012345" required value={matricNumber} onChange={(e) => setMatricNumber(e.target.value)}/>
+          <Label htmlFor="matricNumber">{idLabel}</Label>
+          <Input id="matricNumber" type="text" placeholder={idPlaceholder} required value={matricNumber} onChange={(e) => setMatricNumber(e.target.value)}/>
         </div>
         <div className="grid gap-2">
           <Label htmlFor="password">Password</Label>
