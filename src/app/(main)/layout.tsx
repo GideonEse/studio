@@ -49,7 +49,7 @@ export default function MainLayout({
           <div className="flex items-center gap-2">
              <SidebarTrigger className="md:hidden" />
             <Logo className="w-8 h-8 text-primary" />
-            <h1 className="text-xl font-bold text-foreground font-headline">CampusCare Connect</h1>
+            <h1 className="text-xl font-bold text-foreground font-headline">Crawford University HMS</h1>
           </div>
           <UserNav />
         </header>

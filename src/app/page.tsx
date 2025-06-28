@@ -6,8 +6,8 @@ export default function Home() {
     <main className="flex flex-col items-center justify-center min-h-screen p-4">
       <div className="flex items-center gap-4 mb-8 text-primary">
         <Logo className="w-12 h-12" />
-        <h1 className="text-4xl font-bold font-headline text-foreground">
-          CampusCare Connect
+        <h1 className="text-2xl md:text-4xl text-center font-bold font-headline text-foreground">
+          Crawford University Health Monitoring System
         </h1>
       </div>
       <LoginForm />

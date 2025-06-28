@@ -4,8 +4,8 @@ import { Toaster } from "@/components/ui/toaster"
 import { AuthProvider } from '@/contexts/auth-context';
 
 export const metadata: Metadata = {
-  title: 'CampusCare Connect',
-  description: 'University Healthcare Monitoring System',
+  title: 'Crawford University Health Monitoring System',
+  description: 'Health Monitoring System for Crawford University',
 };
 
 export default function RootLayout({
