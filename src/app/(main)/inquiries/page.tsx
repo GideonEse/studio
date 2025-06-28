@@ -17,7 +17,7 @@ export default function InquiriesPage() {
   const { toast } = useToast();
   const { currentUser, inquiries, addInquiry } = useAuth();
 
-  const inquiryHistory = currentUser ? inquiries.filter(i => i.studentId === currentUser.id) : [];
+  const inquiryHistory = currentUser ? (inquiries || []).filter(i => i.studentId === currentUser.id) : [];
 
   const handleSubmitInquiry = () => {
     if (!question.trim() || !currentUser) {

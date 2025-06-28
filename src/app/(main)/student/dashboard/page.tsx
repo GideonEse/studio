@@ -18,7 +18,7 @@ export default function StudentDashboard() {
     .filter(a => a.studentId === currentUser.id)
     .sort((a, b) => new Date(b.dateTime).getTime() - new Date(a.dateTime).getTime());
     
-  const inquiryHistory = inquiries.filter(i => i.studentId === currentUser.id);
+  const inquiryHistory = (inquiries || []).filter(i => i.studentId === currentUser.id);
 
   return (
     <div className="grid gap-6">

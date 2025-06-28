@@ -89,7 +89,7 @@ export default function DoctorDashboard() {
     .filter(a => a.status !== 'Completed' && a.status !== 'Cancelled')
     .sort((a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime());
 
-  const pendingInquiries = inquiries.filter(i => i.status === 'Pending');
+  const pendingInquiries = (inquiries || []).filter(i => i.status === 'Pending');
 
   const handleDeleteUser = () => {
     if (!userToDelete) return;
