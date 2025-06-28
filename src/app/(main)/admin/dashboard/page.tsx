@@ -12,7 +12,7 @@ import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import Link from "next/link";
-import { format } from "date-fns";
+import { format, subMonths } from "date-fns";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -23,15 +23,6 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-
-const chartData = [
-    { month: "January", appointments: 186 },
-    { month: "February", appointments: 305 },
-    { month: "March", appointments: 237 },
-    { month: "April", appointments: 273 },
-    { month: "May", appointments: 209 },
-    { month: "June", appointments: 214 },
-  ]
   
   const chartConfig = {
     appointments: {
@@ -43,6 +34,36 @@ const chartData = [
 export default function DoctorDashboard() {
   const { users, appointments, inquiries, deleteUser } = useAuth();
   const [userToDelete, setUserToDelete] = React.useState<User | null>(null);
+
+  const chartData = React.useMemo(() => {
+    // Generate entries for the last 6 months, including the current month.
+    const lastSixMonths = Array.from({ length: 6 }, (_, i) => {
+      const d = subMonths(new Date(), i);
+      return {
+        // Use a unique key like 'YYYY-MM' to handle year changes
+        key: format(d, 'yyyy-MM'), 
+        month: format(d, 'MMMM'),
+        appointments: 0,
+      };
+    }).reverse(); // reverse to have oldest month first
+
+    // Create a map for quick lookups
+    const monthMap = new Map(lastSixMonths.map(m => [m.key, m]));
+
+    // Aggregate appointments
+    appointments.forEach(apt => {
+      const aptKey = format(new Date(apt.dateTime), 'yyyy-MM');
+      if (monthMap.has(aptKey)) {
+        monthMap.get(aptKey)!.appointments++;
+      }
+    });
+
+    // Return the data in the format the chart expects
+    return Array.from(monthMap.values()).map(({ month, appointments }) => ({
+      month,
+      appointments,
+    }));
+  }, [appointments]);
 
   const upcomingAppointments = appointments
     .filter(a => new Date(a.dateTime) >= new Date())
@@ -129,7 +150,7 @@ export default function DoctorDashboard() {
         <Card>
           <CardHeader>
             <CardTitle className="font-headline">Appointment Analytics</CardTitle>
-            <CardDescription>Monthly appointment volume.</CardDescription>
+            <CardDescription>Monthly appointment volume for the last 6 months.</CardDescription>
           </CardHeader>
           <CardContent>
             <ChartContainer config={chartConfig} className="h-[300px] w-full">
