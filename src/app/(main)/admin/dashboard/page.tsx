@@ -9,10 +9,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal, Pencil, Trash2, Calendar as CalendarIcon } from "lucide-react";
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import Link from "next/link";
-import { format, subMonths } from "date-fns";
+import { format } from "date-fns";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -30,13 +28,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-  
-  const chartConfig = {
-    appointments: {
-      label: "Appointments",
-      color: "hsl(var(--primary))",
-    },
-  }
 
 export default function DoctorDashboard() {
   const { users, appointments, inquiries, deleteUser, updateAppointment } = useAuth();
@@ -57,33 +48,6 @@ export default function DoctorDashboard() {
         setDoctorMessage(appointmentToManage.doctorMessage || '');
     }
   }, [appointmentToManage]);
-
-  const chartData = React.useMemo(() => {
-    const lastSixMonths = Array.from({ length: 6 }, (_, i) => {
-      const d = subMonths(new Date(), i);
-      return {
-        key: format(d, 'yyyy-MM'), 
-        month: format(d, 'MMMM'),
-        appointments: 0,
-      };
-    }).reverse();
-
-    const monthMap = new Map(lastSixMonths.map(m => [m.key, m]));
-    
-    appointments.forEach(apt => {
-        if (apt.status === 'Confirmed' || apt.status === 'Completed') {
-            const aptKey = format(new Date(apt.dateTime), 'yyyy-MM');
-            if (monthMap.has(aptKey)) {
-                monthMap.get(aptKey)!.appointments++;
-            }
-        }
-    });
-
-    return Array.from(monthMap.values()).map(({ month, appointments }) => ({
-      month,
-      appointments,
-    }));
-  }, [appointments]);
 
   const activeAppointments = appointments
     .filter(a => a.status !== 'Completed' && a.status !== 'Cancelled')
@@ -206,32 +170,6 @@ export default function DoctorDashboard() {
                   </CardContent>
               </Card>
           </div>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="font-headline">Appointment Analytics</CardTitle>
-            <CardDescription>Monthly volume of confirmed/completed appointments.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ChartContainer config={chartConfig} className="h-[300px] w-full">
-              <BarChart accessibilityLayer data={chartData}>
-                <CartesianGrid vertical={false} />
-                <XAxis
-                  dataKey="month"
-                  tickLine={false}
-                  tickMargin={10}
-                  axisLine={false}
-                  tickFormatter={(value) => value.slice(0, 3)}
-                />
-                <ChartTooltip
-                  cursor={false}
-                  content={<ChartTooltipContent hideLabel />}
-                />
-                <Bar dataKey="appointments" fill="var(--color-appointments)" radius={8} />
-              </BarChart>
-            </ChartContainer>
-          </CardContent>
-        </Card>
 
         <Card>
           <CardHeader>
