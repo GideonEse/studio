@@ -26,6 +26,12 @@ const studentLinks = [
   { href: '/inquiries', label: 'My Inquiries', icon: MessageSquareQuote },
 ];
 
+const staffLinks = [
+    { href: '/staff/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { href: '/book-appointment', label: 'Book Appointment', icon: CalendarPlus },
+    { href: '/inquiries', label: 'My Inquiries', icon: MessageSquareQuote },
+];
+
 const doctorLinks = [
   { href: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
 ];
@@ -41,7 +47,7 @@ export function AppSidebar() {
         case 'student':
             return { role: 'Student', icon: <User className="w-5 h-5"/>, links: studentLinks };
         case 'staff':
-            return { role: 'Staff', icon: <User className="w-5 h-5"/>, links: studentLinks };
+            return { role: 'Staff', icon: <User className="w-5 h-5"/>, links: staffLinks };
         case 'doctor':
             return { role: 'Doctor', icon: <Stethoscope className="w-5 h-5"/>, links: doctorLinks };
         default:

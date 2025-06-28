@@ -37,8 +37,10 @@ export function LoginForm() {
           title: 'Login Successful',
           description: `Welcome back, ${user.name}!`,
         });
-        if (user.role === 'student' || user.role === 'staff') {
+        if (user.role === 'student') {
           router.push('/student/dashboard');
+        } else if (user.role === 'staff') {
+            router.push('/staff/dashboard');
         } else {
           router.push('/admin/dashboard');
         }
