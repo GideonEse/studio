@@ -25,9 +25,7 @@ export type User = {
     status: 'Pending' | 'Resolved';
   };
   
-  export const users: User[] = [
-    { id: 'usr_3', name: 'Dr. Carol White', matricNumber: 'D10001', role: 'doctor', password: 'password123' },
-  ];
+  export const users: User[] = [];
   
   export const appointments: Appointment[] = [];
   
