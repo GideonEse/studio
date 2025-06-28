@@ -96,18 +96,24 @@ export default function StudentDashboard() {
                 <TableHead>Date</TableHead>
                 <TableHead>Question</TableHead>
                 <TableHead>Status</TableHead>
+                <TableHead>Doctor's Response</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {inquiryHistory.map((inq) => (
+              {inquiryHistory.length > 0 ? inquiryHistory.map((inq) => (
                 <TableRow key={inq.id}>
                   <TableCell>{format(new Date(inq.date), "PPP")}</TableCell>
                   <TableCell className="max-w-xs truncate">{inq.question}</TableCell>
                   <TableCell>
                     <Badge variant={inq.status === 'Resolved' ? 'secondary' : 'outline'}>{inq.status}</Badge>
                   </TableCell>
+                  <TableCell className="max-w-xs truncate">{inq.response || '—'}</TableCell>
                 </TableRow>
-              ))}
+              )) : (
+                <TableRow>
+                  <TableCell colSpan={4} className="text-center">You have no inquiry history.</TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </CardContent>
