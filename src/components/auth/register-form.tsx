@@ -29,7 +29,7 @@ export function RegisterForm() {
   const [role, setRole] = React.useState<User['role']>('student');
 
   const idLabel = role === 'student' ? 'Matric Number' : 'Staff Number';
-  const idPlaceholder = role === 'student' ? 'e.g. S012345' : 'e.g. D10001';
+  const idPlaceholder = role === 'student' ? 'e.g. s012345' : role === 'staff' ? 'e.g. S10001' : 'e.g. D10001';
 
   const handleRegister = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -40,6 +40,31 @@ export function RegisterForm() {
         description: 'Please fill out all fields.',
       });
       return;
+    }
+
+    if (role === 'student' && !matricNumber.startsWith('s')) {
+        toast({
+            variant: 'destructive',
+            title: 'Invalid Format',
+            description: "Student matric number must start with 's'.",
+        });
+        return;
+    }
+    if (role === 'staff' && !matricNumber.startsWith('S')) {
+        toast({
+            variant: 'destructive',
+            title: 'Invalid Format',
+            description: "Staff number must start with 'S'.",
+        });
+        return;
+    }
+    if (role === 'doctor' && !matricNumber.startsWith('D')) {
+        toast({
+            variant: 'destructive',
+            title: 'Invalid Format',
+            description: "Doctor's staff number must start with 'D'.",
+        });
+        return;
     }
 
     const newUser = {
