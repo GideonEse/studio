@@ -87,7 +87,7 @@ export default function InquiryDetailPage() {
                 <CardContent className="space-y-2 text-sm">
                     <p><strong>Name:</strong> {inquiry.studentName}</p>
                     <p><strong>Date Submitted:</strong> {format(new Date(inquiry.date), "PPP")}</p>
-                    <p><strong>Status:</strong> <Badge variant={inquiry.status === 'Resolved' ? 'secondary' : 'outline'}>{inquiry.status}</Badge></p>
+                    <div><strong>Status:</strong> <Badge variant={inquiry.status === 'Resolved' ? 'secondary' : 'outline'}>{inquiry.status}</Badge></div>
                 </CardContent>
             </Card>
             <Card>
