@@ -313,7 +313,7 @@ export default function DoctorDashboard() {
             <div className="grid gap-4 py-4">
                 <div className="grid gap-2">
                     <Label>Student</Label>
-                    <Input disabled value={appointmentToManage?.studentName} />
+                    <Input disabled value={appointmentToManage?.studentName || ''} />
                 </div>
                 <div className="grid gap-2">
                     <Label htmlFor="date">Appointment Date</Label>
