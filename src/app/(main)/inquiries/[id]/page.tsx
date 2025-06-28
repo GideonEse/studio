@@ -80,7 +80,7 @@ export default function InquiryDetailPage() {
         <div className="md:col-span-1 space-y-4">
             <Card>
                 <CardHeader>
-                    <CardTitle>Student Details</CardTitle>
+                    <CardTitle>Student/Staff Details</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2 text-sm">
                     <p><strong>Name:</strong> {inquiry.studentName}</p>
@@ -102,7 +102,7 @@ export default function InquiryDetailPage() {
             <Card>
                 <CardHeader>
                     <CardTitle>Respond to Inquiry</CardTitle>
-                    <CardDescription>Draft your reply to the student's question below.</CardDescription>
+                    <CardDescription>Draft your reply to the student's/staff's question below.</CardDescription>
                 </CardHeader>
                 <CardContent>
                    <div className="space-y-2">

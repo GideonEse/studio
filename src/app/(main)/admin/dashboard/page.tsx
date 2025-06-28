@@ -128,7 +128,7 @@ export default function DoctorDashboard() {
                   <Table>
                       <TableHeader>
                         <TableRow>
-                            <TableHead>Student</TableHead>
+                            <TableHead>Student/Staff</TableHead>
                             <TableHead>Requested Date & Time</TableHead>
                             <TableHead>Reason</TableHead>
                             <TableHead>Status</TableHead>
@@ -176,14 +176,14 @@ export default function DoctorDashboard() {
               <Card>
                   <CardHeader>
                   <CardTitle className="font-headline">Pending Health Inquiries</CardTitle>
-                  <CardDescription>Student questions that need a response.</CardDescription>
+                  <CardDescription>Student/Staff questions that need a response.</CardDescription>
                   </CardHeader>
                   <CardContent>
                   <Table>
                       <TableHeader>
                       <TableRow>
                           <TableHead>Date</TableHead>
-                          <TableHead>Student Name</TableHead>
+                          <TableHead>Student/Staff Name</TableHead>
                           <TableHead>Question</TableHead>
                           <TableHead className="text-right">Action</TableHead>
                       </TableRow>
@@ -311,7 +311,7 @@ export default function DoctorDashboard() {
             </DialogHeader>
             <div className="grid gap-4 py-4">
                 <div className="grid gap-2">
-                    <Label>Student</Label>
+                    <Label>Student/Staff</Label>
                     <Input disabled value={appointmentToManage?.studentName || ''} />
                 </div>
                 <div className="grid gap-2">
@@ -360,7 +360,7 @@ export default function DoctorDashboard() {
                     </Select>
                 </div>
                 <div className="grid gap-2">
-                    <Label htmlFor="message">Message for Student (Optional)</Label>
+                    <Label htmlFor="message">Message for Student/Staff (Optional)</Label>
                     <Textarea 
                         id="message"
                         placeholder="e.g., 'Please come 10 minutes early.'"
