@@ -255,8 +255,7 @@ export default function DoctorDashboard() {
                     <TableCell>{user.matricNumber}</TableCell>
                     <TableCell>
                       <Badge variant={
-                          user.role === 'doctor' ? 'secondary' : 
-                          user.role === 'staff' ? 'default' : 'outline'
+                          user.role === 'doctor' ? 'secondary' : 'outline'
                         }>{user.role}</Badge>
                     </TableCell>
                     <TableCell className="text-right">

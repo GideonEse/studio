@@ -15,8 +15,7 @@ import {
     MessageSquareQuote,
     LogOut,
     Stethoscope,
-    User,
-    Briefcase
+    User
 } from 'lucide-react';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/auth-context';
@@ -31,11 +30,6 @@ const doctorLinks = [
   { href: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
 ];
 
-const staffLinks = [
-    { href: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-];
-
-
 export function AppSidebar() {
   const pathname = usePathname();
   const { currentUser, logout } = useAuth();
@@ -48,8 +42,6 @@ export function AppSidebar() {
             return { role: 'Student', icon: <User className="w-5 h-5"/>, links: studentLinks };
         case 'doctor':
             return { role: 'Doctor', icon: <Stethoscope className="w-5 h-5"/>, links: doctorLinks };
-        case 'staff':
-            return { role: 'Staff', icon: <Briefcase className="w-5 h-5"/>, links: staffLinks };
         default:
             return { role: 'User', icon: <User className="w-5 h-5"/>, links: [] };
     }
