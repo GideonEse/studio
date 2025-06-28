@@ -243,7 +243,7 @@ export default function DoctorDashboard() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Name</TableHead>
-                  <TableHead>Staff No.</TableHead>
+                  <TableHead>Matric / Staff No.</TableHead>
                   <TableHead>Role</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>

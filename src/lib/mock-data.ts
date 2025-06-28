@@ -3,7 +3,7 @@ export type User = {
     name: string;
     matricNumber: string;
     password?: string;
-    role: 'student' | 'doctor';
+    role: 'student' | 'doctor' | 'staff';
   };
   
   export type Appointment = {

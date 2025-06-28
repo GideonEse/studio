@@ -29,7 +29,9 @@ export function RegisterForm() {
   const [role, setRole] = React.useState<User['role']>('student');
 
   const idLabel = role === 'student' ? 'Matric Number' : 'Staff Number';
-  const idPlaceholder = role === 'student' ? 'e.g. s012345' : 'e.g. D10001';
+  const idPlaceholder = 
+    role === 'student' ? 'e.g. s012345' : 
+    role === 'doctor' ? 'e.g. D10001' : 'e.g. S20002';
 
   const handleRegister = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -47,6 +49,14 @@ export function RegisterForm() {
             variant: 'destructive',
             title: 'Invalid Format',
             description: "Student matric number must start with 's'.",
+        });
+        return;
+    }
+    if (role === 'staff' && !matricNumber.startsWith('S')) {
+        toast({
+            variant: 'destructive',
+            title: 'Invalid Format',
+            description: "Staff number must start with 'S'.",
         });
         return;
     }
@@ -105,6 +115,7 @@ export function RegisterForm() {
                 </SelectTrigger>
                 <SelectContent>
                     <SelectItem value="student">Student</SelectItem>
+                    <SelectItem value="staff">Staff</SelectItem>
                     <SelectItem value="doctor">Doctor</SelectItem>
                 </SelectContent>
             </Select>

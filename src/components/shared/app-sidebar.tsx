@@ -40,6 +40,8 @@ export function AppSidebar() {
     switch(currentUser.role) {
         case 'student':
             return { role: 'Student', icon: <User className="w-5 h-5"/>, links: studentLinks };
+        case 'staff':
+            return { role: 'Staff', icon: <User className="w-5 h-5"/>, links: studentLinks };
         case 'doctor':
             return { role: 'Doctor', icon: <Stethoscope className="w-5 h-5"/>, links: doctorLinks };
         default:
